@@ -7,10 +7,11 @@ public class PatternInput : MonoBehaviour
     //Private Variables
     private PatternGenerator patternGenerator;
     private bool enableControl = true;
+    private bool patternCompleted = false;
 
     //Public Variables
     public List<InputAction> currentSequence;
-    public SetPatternText setPatternText;
+    public SetUIText setUIText;
 
 
     void Start()
@@ -21,7 +22,9 @@ public class PatternInput : MonoBehaviour
         //Prevent Gameplay Without a Generator
         if (patternGenerator == null)
         {
+            Debug.Log("Pattern Generator is missing.");
             enableControl = false;
+            return;
         }
 
         //Establish Current Pattern
@@ -49,7 +52,7 @@ public class PatternInput : MonoBehaviour
 
         //Display Pattern Player Has to Follow
         string pattern = currentSequence[0].name;
-        setPatternText.SetPattern(pattern);
+        setUIText.SetPattern(pattern);
 
         //Compare Against First Remaining Action (use IDs to avoid copies of actions in the asset)
         if (patternPressed.id == currentSequence[0].id)
@@ -64,6 +67,7 @@ public class PatternInput : MonoBehaviour
             if (currentSequence.Count == 0)
             {
                 Debug.Log("Pattern Completed!");
+                patternCompleted = true;
             }
         }
         else
@@ -76,11 +80,32 @@ public class PatternInput : MonoBehaviour
     {
         if (currentSequence.Count > 0)
         {
-            setPatternText.SetPattern(currentSequence[0].name);
+            setUIText.SetPattern(currentSequence[0].name);
         }
         else
         {
-            setPatternText.SetPattern("Pattern Completed!");
+            setUIText.SetPattern("Pattern Completed!");
         }
+    }
+
+    public void StartNewPattern()
+    {
+        //Reset Values
+        patternCompleted = false;
+        enableControl = true;
+        
+        //Create and Display New Pattern
+        currentSequence = patternGenerator.randomActionSequence(10);
+        UpdatePatternText();
+    }
+
+    public bool GetPatternCompleted()
+    {
+        return patternCompleted;
+    }
+
+    public void GameOver()
+    {
+        enableControl = false;
     }
 }
