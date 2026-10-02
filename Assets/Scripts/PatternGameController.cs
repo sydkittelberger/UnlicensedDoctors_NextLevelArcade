@@ -1,5 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PatternGameController : MonoBehaviour
 {
@@ -13,11 +13,14 @@ public class PatternGameController : MonoBehaviour
     public float timeRemaining;
 
 
-    void Start()
+    void Awake()
     {
         //Assign Pattern Input
         patternInput = GetComponent<PatternInput>();
-
+    }
+    
+    void Start()
+    {
         //Prevent Gameplay Without an Input
         if (patternInput == null)
         {
@@ -26,8 +29,8 @@ public class PatternGameController : MonoBehaviour
         }
 
         //Start and Set Time
-        timerIsRunning = true;
-        timeRemaining = totalTime;
+        ResetTimer();
+        
     }
 
     void Update()
@@ -46,8 +49,7 @@ public class PatternGameController : MonoBehaviour
                 patternInput.StartNewPattern();
                     
                 //Reset the Timer
-                timeRemaining = totalTime;
-                timerIsRunning = true;
+                ResetTimer();
             }
             
             else
@@ -59,17 +61,33 @@ public class PatternGameController : MonoBehaviour
                     timeRemaining = 0f;
                     timerIsRunning = false;
 
-                    //End Game for Player; Transfer to the Next Scene
-                    patternInput.GameOver();
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    //Player Loses a Life
+                    patternInput.LoseALife();
                 }
             }
         }
-
         //Display Updated Time
         UpdateTimerText();
     }
 
+    public void ResetTimer()
+    {
+        timeRemaining = totalTime;
+        timerIsRunning = true;
+    }
+
+    public void UpdatePatternText()
+    {
+        if (patternInput.currentSequence.Count > 0)
+        {
+            setUIText.SetPattern(patternInput.currentSequence[0].name);
+        }
+        else
+        {
+            setUIText.SetPattern("Pattern Completed!");
+        }
+    }
+    
     private void UpdateTimerText()
     {
         //Convert Float to Int to String
@@ -78,5 +96,14 @@ public class PatternGameController : MonoBehaviour
         
         //Display Text
         setUIText.SetTimer(myStringTimer);
+    }
+
+    public void UpdateLivesText()
+    {
+        //Convert Int to String
+        string myStringLives = patternInput.lives.ToString(); 
+
+        //Display Text
+        setUIText.SetLives(myStringLives);
     }
 }

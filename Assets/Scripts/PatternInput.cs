@@ -1,23 +1,26 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class PatternInput : MonoBehaviour
 {
     //Private Variables
     private PatternGenerator patternGenerator;
+    private PatternGameController patternGameController;
     private bool enableControl = true;
     private bool patternCompleted = false;
 
     //Public Variables
     public List<InputAction> currentSequence;
-    public SetUIText setUIText;
+    public int lives = 3; 
 
 
     void Start()
     {
-        //Find Pattern Generator on Game Object
+        //Find Pattern Generator and Controller
         patternGenerator = GetComponent<PatternGenerator>();
+        patternGameController = GetComponent<PatternGameController>();
 
         //Prevent Gameplay Without a Generator
         if (patternGenerator == null)
@@ -31,7 +34,10 @@ public class PatternInput : MonoBehaviour
         currentSequence = patternGenerator.randomActionSequence(10);
 
         //Display First Action
-        UpdatePatternText();
+        patternGameController.UpdatePatternText();
+
+        //Display Lives
+        patternGameController.UpdateLivesText();
     }
 
     void Update()
@@ -51,8 +57,7 @@ public class PatternInput : MonoBehaviour
         InputAction patternPressed = aContext.action;
 
         //Display Pattern Player Has to Follow
-        string pattern = currentSequence[0].name;
-        setUIText.SetPattern(pattern);
+        patternGameController.UpdatePatternText();
 
         //Compare Against First Remaining Action (use IDs to avoid copies of actions in the asset)
         if (patternPressed.id == currentSequence[0].id)
@@ -61,7 +66,7 @@ public class PatternInput : MonoBehaviour
             currentSequence.RemoveAt(0);
 
             //Display Next Action
-            UpdatePatternText();
+            patternGameController.UpdatePatternText();
 
             //Check Whether the Entire Pattern Was Completed
             if (currentSequence.Count == 0)
@@ -73,18 +78,7 @@ public class PatternInput : MonoBehaviour
         else
         {
             Debug.Log("Incorrect Key.");
-        }
-    }
-
-    private void UpdatePatternText()
-    {
-        if (currentSequence.Count > 0)
-        {
-            setUIText.SetPattern(currentSequence[0].name);
-        }
-        else
-        {
-            setUIText.SetPattern("Pattern Completed!");
+            LoseALife();
         }
     }
 
@@ -96,7 +90,7 @@ public class PatternInput : MonoBehaviour
         
         //Create and Display New Pattern
         currentSequence = patternGenerator.randomActionSequence(10);
-        UpdatePatternText();
+        patternGameController.UpdatePatternText();
     }
 
     public bool GetPatternCompleted()
@@ -104,8 +98,25 @@ public class PatternInput : MonoBehaviour
         return patternCompleted;
     }
 
+    public void LoseALife()
+    {
+        lives--;
+        patternGameController.UpdateLivesText();
+
+        if (lives <= 0)
+        {
+            GameOver();
+        }
+        else
+        {
+            patternGameController.ResetTimer();
+        }
+    }
+
     public void GameOver()
     {
         enableControl = false;
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

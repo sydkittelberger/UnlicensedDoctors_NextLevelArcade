@@ -9,6 +9,7 @@ public class SetUIText : MonoBehaviour
     //Public Variables
     public TMP_Text patternText;
     public TMP_Text timerText;
+    public TMP_Text livesText; 
 
     void Start()
     {
@@ -30,5 +31,11 @@ public class SetUIText : MonoBehaviour
     {
         //Set Timer
         timerText.text = timerInput;
+    }
+
+    public void SetLives(string livesInput)
+    {
+        //Set Lives
+        livesText.text = livesInput; 
     }
 }
