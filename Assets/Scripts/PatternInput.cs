@@ -78,7 +78,7 @@ public class PatternInput : MonoBehaviour
         else
         {
             Debug.Log("Incorrect Key.");
-            LoseALife();
+            patternGameController.ErrorMade();
         }
     }
 
@@ -116,6 +116,9 @@ public class PatternInput : MonoBehaviour
     public void GameOver()
     {
         enableControl = false;
+
+        //Prepare and Save Score Before Moving to Next Scene
+        GameManager.manager.score = Mathf.CeilToInt(patternGameController.score);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }

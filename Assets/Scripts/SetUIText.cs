@@ -10,6 +10,7 @@ public class SetUIText : MonoBehaviour
     public TMP_Text patternText;
     public TMP_Text timerText;
     public TMP_Text livesText; 
+    public TMP_Text scoreText;
 
     void Start()
     {
@@ -37,5 +38,11 @@ public class SetUIText : MonoBehaviour
     {
         //Set Lives
         livesText.text = livesInput; 
+    }
+
+    public void SetScore(string scoreInput)
+    {
+        //Set Score
+        scoreText.text = scoreInput;
     }
 }
