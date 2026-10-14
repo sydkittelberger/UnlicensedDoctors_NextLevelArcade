@@ -155,11 +155,7 @@ public class PatternGameController : MonoBehaviour
 
     public void UpdateLivesText()
     {
-        //Convert Int to String
-        string myStringLives = patternInput.lives.ToString(); 
-
-        //Display Text
-        setUIText.SetLives(myStringLives);
+        setUIText.SetLives(patternInput.lives);
     }
 
     public void UpdateScoreText()

@@ -8,24 +8,27 @@ public class PatternInput : MonoBehaviour
     //Private Variables
     private PatternGenerator patternGenerator;
     private PatternGameController patternGameController;
+    private ToolController toolController;
     private bool enableControl = true;
     private bool patternCompleted = false;
 
     //Public Variables
     public List<InputAction> currentSequence;
+    public List<Sprite> currentTools;
     public int lives = 3; 
 
 
     void Start()
     {
-        //Find Pattern Generator and Controller
+        //Find Script References
         patternGenerator = GetComponent<PatternGenerator>();
         patternGameController = GetComponent<PatternGameController>();
+        toolController = FindAnyObjectByType<ToolController>();
 
-        //Prevent Gameplay Without a Generator
-        if (patternGenerator == null)
+        //Prevent Gameplay Without a Generator or Tool Controller
+        if (patternGenerator == null || toolController == null)
         {
-            Debug.Log("Pattern Generator is missing.");
+            Debug.Log("Pattern Generator or Tool Controller is missing.");
             enableControl = false;
             return;
         }
@@ -35,6 +38,10 @@ public class PatternInput : MonoBehaviour
 
         //Display First Action
         patternGameController.UpdatePatternText();
+
+        //Display First Tool
+        currentTools = toolController.randomizeTools(patternGameController.numberOfPatterns);
+        DisplayNextTool();
 
         //Display Lives
         patternGameController.UpdateLivesText();
@@ -91,11 +98,26 @@ public class PatternInput : MonoBehaviour
         //Create and Display New Pattern
         currentSequence = patternGenerator.randomActionSequence(10);
         patternGameController.UpdatePatternText();
+
+        //Display New Tool
+        DisplayNextTool();
     }
 
     public bool GetPatternCompleted()
     {
         return patternCompleted;
+    }
+
+    private void DisplayNextTool()
+    {
+        if (currentTools == null || currentTools.Count == 0)
+        return;
+
+        //Display Next Tool
+        toolController.SetTool(currentTools[0]);
+
+        //Remove It From Remaining Tools
+        currentTools.RemoveAt(0);
     }
 
     public void LoseALife()

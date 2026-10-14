@@ -1,15 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class SetUIText : MonoBehaviour
 {
      //Private Variables
-
+     [SerializeField] private Image[] heartImages;
 
     //Public Variables
     public TMP_Text patternText;
     public TMP_Text timerText;
-    public TMP_Text livesText; 
     public TMP_Text scoreText;
 
     void Start()
@@ -34,10 +34,21 @@ public class SetUIText : MonoBehaviour
         timerText.text = timerInput;
     }
 
-    public void SetLives(string livesInput)
+    public void SetLives(int livesInput)
     {
-        //Set Lives
-        livesText.text = livesInput; 
+        //Set Lives 
+        for (int i = 0; i<heartImages.Length; i++)
+        {
+            //Show One Heart Per Remaining Life
+            if (i < livesInput)
+            {
+                heartImages[i].enabled = true;
+            }
+            else
+            {
+                heartImages[i].enabled = false;
+            }
+        }
     }
 
     public void SetScore(string scoreInput)
