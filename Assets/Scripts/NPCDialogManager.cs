@@ -84,7 +84,10 @@ public class NPCDialogManager : MonoBehaviour
             }
 
             isTyping = false;
+
             setDialogText.SetDialog(currentLine.text);
+            setDialogText.ShowTextBox();
+
             return;
         }
 
@@ -136,6 +139,7 @@ public class NPCDialogManager : MonoBehaviour
 
         //Clear the Text When the Sequence Ends
         setDialogText.SetDialog("");
+        setDialogText.HideTextBox();
 
         //Load the Next Scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);

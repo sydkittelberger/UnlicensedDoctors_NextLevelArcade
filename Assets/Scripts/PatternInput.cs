@@ -9,6 +9,8 @@ public class PatternInput : MonoBehaviour
     private PatternGenerator patternGenerator;
     private PatternGameController patternGameController;
     private ToolController toolController;
+    private CameraShake cameraShakeController;
+    private AudioController audioController;
     private bool enableControl = true;
     private bool patternCompleted = false;
 
@@ -24,6 +26,8 @@ public class PatternInput : MonoBehaviour
         patternGenerator = GetComponent<PatternGenerator>();
         patternGameController = GetComponent<PatternGameController>();
         toolController = FindAnyObjectByType<ToolController>();
+        cameraShakeController = FindAnyObjectByType<CameraShake>();
+        audioController = FindAnyObjectByType<AudioController>();
 
         //Prevent Gameplay Without a Generator or Tool Controller
         if (patternGenerator == null || toolController == null)
@@ -132,6 +136,12 @@ public class PatternInput : MonoBehaviour
         else
         {
             patternGameController.ResetTimer();
+
+            //Trigger Camera Shake
+            cameraShakeController.ShakeCamera(0.35f, 0.35f);
+
+            //Update Music
+            audioController.IntensifyMusic();
         }
     }
 

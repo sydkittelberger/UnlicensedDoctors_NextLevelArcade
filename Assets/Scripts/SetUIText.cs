@@ -9,6 +9,7 @@ public class SetUIText : MonoBehaviour
 
     //Public Variables
     public TMP_Text patternText;
+    public TMP_Text nextPatternText;
     public TMP_Text timerText;
     public TMP_Text scoreText;
 
@@ -22,10 +23,11 @@ public class SetUIText : MonoBehaviour
         
     }
 
-    public void SetPattern(string patternInput)
+    public void SetPattern(string patternInput, string nextPatternInput)
     {
         //Set Text
         patternText.text = patternInput;
+        nextPatternText.text = nextPatternInput;
     }
 
     public void SetTimer(string timerInput)

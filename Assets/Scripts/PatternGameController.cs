@@ -5,6 +5,7 @@ public class PatternGameController : MonoBehaviour
 {
     //Private Variables
     private PatternInput patternInput;
+    private CameraShake cameraShakeController;
     private bool timerIsRunning = false;
     private bool isErrorMade = false;
 
@@ -21,8 +22,9 @@ public class PatternGameController : MonoBehaviour
 
     void Awake()
     {
-        //Assign Pattern Input
+        //Assign Pattern Input and Camera Shake
         patternInput = GetComponent<PatternInput>();
+        cameraShakeController = FindAnyObjectByType<CameraShake>();
     }
     
     void Start()
@@ -71,6 +73,9 @@ public class PatternGameController : MonoBehaviour
     public void ErrorMade()
     {
         isErrorMade = true;
+
+        //Trigger Camera Shake
+        cameraShakeController.ShakeCamera(0.15f, 0.15f);
     }
 
     private void RunTimer()
@@ -94,7 +99,6 @@ public class PatternGameController : MonoBehaviour
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
                     return;
-
                 }
                 
                 //Start a New Pattern
@@ -133,13 +137,17 @@ public class PatternGameController : MonoBehaviour
 
     public void UpdatePatternText()
     {
-        if (patternInput.currentSequence.Count > 0)
+        if (patternInput.currentSequence.Count > 1)
         {
-            setUIText.SetPattern(patternInput.currentSequence[0].name);
+            setUIText.SetPattern(patternInput.currentSequence[0].name, patternInput.currentSequence[1].name);
+        }
+        else if (patternInput.currentSequence.Count > 0)
+        {
+            setUIText.SetPattern(patternInput.currentSequence[0].name, "");
         }
         else
         {
-            setUIText.SetPattern("");
+            setUIText.SetPattern("", "");
         }
     }
     
