@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78068e5a3a5e6e048bba9d40edca4492, type: 3}
+  m_Name: Metacarpal
+  m_EditorClassIdentifier: Assembly-CSharp::ToolSO
+  toolSprite: {fileID: 21300000, guid: 44d4e6dec69433f4d80f363a376bff69, type: 3}
+  upPosition: {x: -0.65, y: 0.5, z: 0}
+  downPosition: {x: -0.65, y: -0.5, z: 0}
+  leftPosition: {x: -3.8, y: 0.15, z: 0}
+  rightPosition: {x: 2.65, y: 0.15, z: 0}
+  b1Position: {x: -0.15, y: 0.45, z: 0}
+  b2Position: {x: 1.3, y: -0.25, z: 0}

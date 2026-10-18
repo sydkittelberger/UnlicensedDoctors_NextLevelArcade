@@ -9,14 +9,16 @@ public class PatternInput : MonoBehaviour
     private PatternGenerator patternGenerator;
     private PatternGameController patternGameController;
     private ToolController toolController;
+    private HandController handController;
     private CameraShake cameraShakeController;
     private AudioController audioController;
+    private SetDarkeningEffect setDarkeningEffect;
     private bool enableControl = true;
     private bool patternCompleted = false;
 
     //Public Variables
     public List<InputAction> currentSequence;
-    public List<Sprite> currentTools;
+    public List<ToolSO> currentTools;
     public int lives = 3; 
 
 
@@ -26,8 +28,10 @@ public class PatternInput : MonoBehaviour
         patternGenerator = GetComponent<PatternGenerator>();
         patternGameController = GetComponent<PatternGameController>();
         toolController = FindAnyObjectByType<ToolController>();
+        handController = FindAnyObjectByType<HandController>();
         cameraShakeController = FindAnyObjectByType<CameraShake>();
         audioController = FindAnyObjectByType<AudioController>();
+        setDarkeningEffect = FindAnyObjectByType<SetDarkeningEffect>();
 
         //Prevent Gameplay Without a Generator or Tool Controller
         if (patternGenerator == null || toolController == null)
@@ -73,6 +77,10 @@ public class PatternInput : MonoBehaviour
         //Compare Against First Remaining Action (use IDs to avoid copies of actions in the asset)
         if (patternPressed.id == currentSequence[0].id)
         {
+            //Record Germ's Current Position, Animate Hand Towards its Direction
+            Vector3 germPosition = toolController.germ.position; //Using germ.position since the hand is not a parent of the germ
+            handController.MoveToGerm(germPosition);
+            
             //Remove Action From List
             currentSequence.RemoveAt(0);
 
@@ -84,6 +92,12 @@ public class PatternInput : MonoBehaviour
             {
                 Debug.Log("Pattern Completed!");
                 patternCompleted = true;
+            }
+
+            //Position Germ for Next Action
+            else
+            {
+                DisplayCurrentGerm();
             }
         }
         else
@@ -122,12 +136,26 @@ public class PatternInput : MonoBehaviour
 
         //Remove It From Remaining Tools
         currentTools.RemoveAt(0);
+
+        //Position Germ
+        DisplayCurrentGerm();
+    }
+
+    private void DisplayCurrentGerm()
+    {
+        if (currentSequence == null || currentSequence.Count == 0)
+        return;
+
+        toolController.SetGermPosition(currentSequence[0].name);
     }
 
     public void LoseALife()
     {
         lives--;
         patternGameController.UpdateLivesText();
+
+        //Darken the Game
+        setDarkeningEffect.IncreaseDarkness();
 
         if (lives <= 0)
         {

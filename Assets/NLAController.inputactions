@@ -43,7 +43,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Z",
+                    "name": "B1",
                     "type": "Button",
                     "id": "b3e8bf85-3e91-4717-a421-a115493c40c6",
                     "expectedControlType": "",
@@ -52,7 +52,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "X",
+                    "name": "B2",
                     "type": "Button",
                     "id": "056f96b6-62af-41a9-8f7f-a9ea646f9723",
                     "expectedControlType": "",
@@ -113,7 +113,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Z",
+                    "action": "B1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -124,7 +124,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "X",
+                    "action": "B2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
