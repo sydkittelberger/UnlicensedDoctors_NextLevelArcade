@@ -92,11 +92,11 @@ public class ToolController : MonoBehaviour
             germ.localPosition = currentTool.rightPosition;
             break;
 
-            case "B1":
+            case "Z":
             germ.localPosition = currentTool.b1Position;
             break;
 
-            case "B2":
+            case "X":
             germ.localPosition = currentTool.b2Position;
             break;
         }

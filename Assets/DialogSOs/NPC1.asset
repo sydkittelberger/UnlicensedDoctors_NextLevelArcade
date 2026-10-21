@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: NPC1
   m_EditorClassIdentifier: Assembly-CSharp::NPCDialogSO
   dialogLines:
-  - text: Get to work! I need these tools cleaned stat.
+  - text: 'Come at once!! A patient just arrived with a broken leg, we must amputate
+      it. Quickly go clean my tools at once! '

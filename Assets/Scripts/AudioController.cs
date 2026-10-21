@@ -34,4 +34,13 @@ public class AudioController : MonoBehaviour
         //Compensate for Pitch Increase From Faster Playback
         musicMixer.SetFloat("MusicPitch", musicPitch/musicSpeed);
     }
+
+    public void ResetMusic()
+    {
+        //Reset Values
+        musicSpeed = 1f;
+        musicPitch = 1f;
+        musicSource.pitch = musicSpeed;
+        musicMixer.SetFloat("MusicPitch", musicPitch/musicSpeed);
+    }
 }

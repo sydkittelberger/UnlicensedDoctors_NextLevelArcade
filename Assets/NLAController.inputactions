@@ -43,7 +43,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "B1",
+                    "name": "Z",
                     "type": "Button",
                     "id": "b3e8bf85-3e91-4717-a421-a115493c40c6",
                     "expectedControlType": "",
@@ -52,7 +52,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "B2",
+                    "name": "X",
                     "type": "Button",
                     "id": "056f96b6-62af-41a9-8f7f-a9ea646f9723",
                     "expectedControlType": "",
@@ -113,7 +113,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "B1",
+                    "action": "Z",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -124,7 +124,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "B2",
+                    "action": "X",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -276,6 +276,45 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Leaderboard",
+            "id": "087ba4af-6fcf-4734-b90c-e69374c0dbe9",
+            "actions": [
+                {
+                    "name": "TitleScreen",
+                    "type": "Button",
+                    "id": "a9127214-728f-4ae7-95d8-a752a4232901",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f45ffb39-a57a-45a7-bae3-1e243d88b7f2",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TitleScreen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ac3b0af9-bea4-4d6e-810b-3f2d9141aebe",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TitleScreen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
