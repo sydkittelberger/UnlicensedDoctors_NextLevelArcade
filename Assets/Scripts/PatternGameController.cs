@@ -34,11 +34,7 @@ public class PatternGameController : MonoBehaviour
         {
             Debug.Log("Pattern Input is missing.");
             return;
-        }
-
-        //Start and Set Time
-        ResetTimer();
-        
+        }   
     }
 
     void Update()
@@ -103,9 +99,6 @@ public class PatternGameController : MonoBehaviour
                 
                 //Start a New Pattern
                 patternInput.StartNewPattern();
-                    
-                //Reset the Timer
-                ResetTimer();
             }
             
             else

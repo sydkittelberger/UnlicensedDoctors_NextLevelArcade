@@ -4,6 +4,15 @@ using UnityEngine;
 public class ToolSO : ScriptableObject
 {
     public Sprite toolSprite;
+    public float rotationAmount;
+
+    [Header("Germ Sprites")]
+    public Sprite germUpSprite;
+    public Sprite germDownSprite;
+    public Sprite germLeftSprite;
+    public Sprite germRightSprite;
+    public Sprite germB1Sprite;
+    public Sprite germB2Sprite;
 
     [Header("Germ Positions")]
     public Vector3 upPosition;

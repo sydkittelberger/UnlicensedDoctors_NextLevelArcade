@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class PatternInput : MonoBehaviour
@@ -13,7 +14,7 @@ public class PatternInput : MonoBehaviour
     private CameraShake cameraShakeController;
     private AudioController audioController;
     private SetDarkeningEffect setDarkeningEffect;
-    private bool enableControl = true;
+    private bool enableControl = false;
     private bool patternCompleted = false;
 
     //Public Variables
@@ -41,15 +42,11 @@ public class PatternInput : MonoBehaviour
             return;
         }
 
-        //Establish Current Pattern
-        currentSequence = patternGenerator.randomActionSequence(10);
-
-        //Display First Action
-        patternGameController.UpdatePatternText();
-
-        //Display First Tool
+        //Generate Tools for Level
         currentTools = toolController.randomizeTools(patternGameController.numberOfPatterns);
-        DisplayNextTool();
+
+        //Start Pattern and Slide Tool In
+        StartNewPattern();
 
         //Display Lives
         patternGameController.UpdateLivesText();
@@ -92,12 +89,14 @@ public class PatternInput : MonoBehaviour
             {
                 Debug.Log("Pattern Completed!");
                 patternCompleted = true;
+                enableControl = false;
             }
 
             //Position Germ for Next Action
             else
             {
                 DisplayCurrentGerm();
+                DisplayIncomingGerm();
             }
         }
         else
@@ -111,34 +110,40 @@ public class PatternInput : MonoBehaviour
     {
         //Reset Values
         patternCompleted = false;
-        enableControl = true;
+        enableControl = false;
         
-        //Create and Display New Pattern
+        StartCoroutine(BeginPattern());
+    }
+
+    private IEnumerator BeginPattern()
+    {
+        //Create New Pattern
         currentSequence = patternGenerator.randomActionSequence(10);
         patternGameController.UpdatePatternText();
 
-        //Display New Tool
-        DisplayNextTool();
+        //Wait Until Method Finishes Before Continuing
+        yield return DisplayNextTool();
+
+        //Start Gameplay Once Tool is Ready
+        patternGameController.ResetTimer();
+        enableControl = true;
     }
 
-    public bool GetPatternCompleted()
-    {
-        return patternCompleted;
-    }
-
-    private void DisplayNextTool()
+    private IEnumerator DisplayNextTool()
     {
         if (currentTools == null || currentTools.Count == 0)
-        return;
+        yield break;
 
-        //Display Next Tool
+        //Prepare Incoming Tool and Outgoing Copy
         toolController.SetTool(currentTools[0]);
-
-        //Remove It From Remaining Tools
         currentTools.RemoveAt(0);
 
-        //Position Germ
+        //Position Germs (before tool starts moving, as this is the incoming tool and the player needs to see the germs)
         DisplayCurrentGerm();
+        DisplayIncomingGerm();
+
+        //Animate Both Tools Together
+        yield return toolController.AnimateToolTransition();
     }
 
     private void DisplayCurrentGerm()
@@ -147,6 +152,27 @@ public class PatternInput : MonoBehaviour
         return;
 
         toolController.SetGermPosition(currentSequence[0].name);
+    }
+
+    private void DisplayIncomingGerm()
+    {
+        //Determine If There's and Incoming Action
+        bool hasIncomingAction = currentSequence != null && currentSequence.Count >=2;
+
+        //Display Accorddingly
+        toolController.incomingGerm.gameObject.SetActive(hasIncomingAction);
+
+        //Leave Function If There's No Incoming Action
+        if (!hasIncomingAction)
+        return;
+
+        //Set Position
+        toolController.SetGermPosition(currentSequence[1].name, toolController.incomingGerm);
+    }
+
+    public bool GetPatternCompleted()
+    {
+        return patternCompleted;
     }
 
     public void LoseALife()

@@ -6,6 +6,7 @@ public class PatternGenerator : MonoBehaviour
 {
     //Private Variables
     [SerializeField] private List<InputActionReference> playerActions; 
+    private InputAction previousAction;
 
     //Public Variables
 
@@ -35,8 +36,15 @@ public class PatternGenerator : MonoBehaviour
             //Pick a Random Index
             int randomIndex = Random.Range(0, playerActions.Count);
 
+            //Check Against Previous Index (to avoid immediate repetition, including across patterns)
+            while (playerActions[randomIndex].action == previousAction)
+            {
+                randomIndex = Random.Range(0, playerActions.Count); 
+            }
+
             //Extract Player Action From Index
             sequence.Add(playerActions[randomIndex].action);
+            previousAction = playerActions[randomIndex].action;
         }
 
         return sequence;

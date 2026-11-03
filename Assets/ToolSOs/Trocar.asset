@@ -13,9 +13,16 @@ MonoBehaviour:
   m_Name: Trocar
   m_EditorClassIdentifier: Assembly-CSharp::ToolSO
   toolSprite: {fileID: 21300000, guid: de3730c7552caa54581c47bb6d57752c, type: 3}
-  upPosition: {x: -2.8, y: 1.55, z: 0}
-  downPosition: {x: 1.75, y: -1.35, z: 0}
-  leftPosition: {x: -1.3, y: 0.7, z: 0}
-  rightPosition: {x: 0.8, y: -0.65, z: 0}
+  rotationAmount: 125
+  germUpSprite: {fileID: 21300000, guid: 45ac4fcfde7db7d4ca555a502311bec1, type: 3}
+  germDownSprite: {fileID: 21300000, guid: 6ee2b2cc155a2634285db631493ba0db, type: 3}
+  germLeftSprite: {fileID: 21300000, guid: 35ce50bb078286245aa8c6d0c431e49d, type: 3}
+  germRightSprite: {fileID: 21300000, guid: 27ba00e636a011040a499e6afb058a64, type: 3}
+  germB1Sprite: {fileID: 21300000, guid: 86947694b69c4434ab81aa5b8639ac0e, type: 3}
+  germB2Sprite: {fileID: 21300000, guid: 79bd0f72d0d83a241a8192be2962efcf, type: 3}
+  upPosition: {x: 0, y: 1.4, z: 0}
+  downPosition: {x: 0.15, y: -4.35, z: 0}
+  leftPosition: {x: -0.82, y: -2, z: 0}
+  rightPosition: {x: 0.75, y: -2, z: 0}
   b1Position: {x: -1, y: 0, z: 0}
   b2Position: {x: 0.4, y: 0, z: 0}
