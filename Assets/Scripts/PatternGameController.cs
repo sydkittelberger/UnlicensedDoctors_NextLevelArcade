@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PatternGameController : MonoBehaviour
 {
     //Private Variables
     private PatternInput patternInput;
     private CameraShake cameraShakeController;
+    private ToolController toolController;
     private bool timerIsRunning = false;
     private bool isErrorMade = false;
 
@@ -25,6 +27,7 @@ public class PatternGameController : MonoBehaviour
         //Assign Pattern Input and Camera Shake
         patternInput = GetComponent<PatternInput>();
         cameraShakeController = FindAnyObjectByType<CameraShake>();
+        toolController = FindAnyObjectByType<ToolController>();
     }
     
     void Start()
@@ -80,23 +83,20 @@ public class PatternGameController : MonoBehaviour
         { 
             //Check for Pattern Completion
             if (patternInput.GetPatternCompleted())
-            {
+            {                
+                //Stop Timer
+                timerIsRunning = false;
+                
                 numberOfPatterns--;
 
                 //Limit Amount of Patterns Per Level
                 if (numberOfPatterns <= 0)
                 {
-                    timerIsRunning = false;
-
-                    //Prepare and Save Score Before Moving to Next Scene
-                    GameManager.manager.score = Mathf.CeilToInt(score);
-                    
-                    //Load the Next Scene
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-
+                    //Allow Tool to Shine Before Exiting Scene
+                    StartCoroutine(FinishLevel());
                     return;
                 }
-                
+
                 //Start a New Pattern
                 patternInput.StartNewPattern();
             }
@@ -168,5 +168,16 @@ public class PatternGameController : MonoBehaviour
         //Display Text
         setUIText.SetScore(myStringScore);
         
+    }
+
+    private IEnumerator FinishLevel()
+    {
+        yield return toolController.AnimateToolTransition(true);
+
+        //Prepare and Save Score Before Moving to Next Scene
+        GameManager.manager.score = Mathf.CeilToInt(score);
+                    
+        //Load the Next Scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

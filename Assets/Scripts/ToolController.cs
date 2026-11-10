@@ -103,6 +103,9 @@ public class ToolController : MonoBehaviour
             outgoingRenderer.sortingOrder = spriteRenderer.sortingOrder;
             outgoingRenderer.flipX = spriteRenderer.flipX;
             outgoingRenderer.flipY = spriteRenderer.flipY;
+
+            //Give the Shine Material to Outgoing Tool
+            outgoingObject.AddComponent<ToolShineController>();
         }
         
         //Change "Real" Display to New Tool
@@ -159,19 +162,50 @@ public class ToolController : MonoBehaviour
         }
     }
 
-    public IEnumerator AnimateToolTransition()
+    public IEnumerator AnimateToolTransition(bool isFinalTool = false)
     {
-        //Wait for Shake Before Sliding
-        yield return ShakeTool();
+        Transform exitingTool;
+        if (isFinalTool)
+        {
+            //Hide Germs (as final tool is cleaned)
+            if (germ != null)
+            {
+                germ.gameObject.SetActive(false);
+            }
+            if (incomingGerm != null)
+            {
+                incomingGerm.gameObject.SetActive(false);
+            }
+            
+            //Final Transition Uses Current Tool
+            exitingTool = toolDisplay;
+        }
+        else
+        {
+            //Normal Transitions Use the Outgoing Copy
+            exitingTool = outgoingTool;
+        }
+
+        if (exitingTool != null)
+        {
+            //Wait for Shake Before Sliding
+            yield return ShakeTool(exitingTool);
+
+            //Wait for Shine Before Sliding
+            ToolShineController toolShine = exitingTool.GetComponent<ToolShineController>();
+            if (toolShine != null)
+            {
+                yield return toolShine.PlayShineAndWait();
+            }
+        }
         
         //Set Up Positions/Destinations
         Vector3 incomingStart = toolDisplay.localPosition; //Tool starts at the left
         Vector3 outgoingStart = Vector3.zero; //Must declare outside of if statement to be used elsewhere
-        Vector3 outgoingEnd = Vector3.zero; //Must declare outside of if statement to be used elsewhere
-        if (outgoingTool != null)
+        Vector3 outgoingEnd = toolRestingPosition + Vector3.right * slideOutDistance;
+        if (exitingTool != null)
         {
-            outgoingStart = outgoingTool.localPosition;
-            outgoingEnd = toolRestingPosition + Vector3.right * slideOutDistance;
+            outgoingStart = exitingTool.localPosition;
         }
 
         float elapsed = 0f;
@@ -184,39 +218,51 @@ public class ToolController : MonoBehaviour
             //Ease In and Out (start slow, speed up, end slow)
             float easedProgress = Mathf.SmoothStep(0f, 1f, progress);
 
-            //Slide New Tool In
-            toolDisplay.localPosition = Vector3.Lerp(incomingStart, toolRestingPosition, easedProgress);
+            //Only Bring Another Tool In During Normal Transitions
+            if (!isFinalTool)
+            {
+                //Slide New Tool In
+                toolDisplay.localPosition = Vector3.Lerp(incomingStart, toolRestingPosition, easedProgress);
+            }
 
             //Slide Completed Tool Out Simultaneously
-            if (outgoingTool != null)
+            if (exitingTool != null)
             {
-                outgoingTool.localPosition = Vector3.Lerp(outgoingStart, outgoingEnd, easedProgress);
+                exitingTool.localPosition = Vector3.Lerp(outgoingStart, outgoingEnd, easedProgress);
             }
 
             //Pauses Coroutine Until Next Frame
             yield return null;
         }
 
-        //Ensure Tool Reaches Destination
-        toolDisplay.localPosition = toolRestingPosition;
-
-        //Remove Completed Tool
-        if (outgoingTool != null)
+        //Leave the Final Tool Offscreen
+        if (isFinalTool)
         {
-            Destroy(outgoingTool.gameObject);
-            outgoingTool = null;
+            toolDisplay.localPosition = outgoingEnd;
+        }
+        else
+        {
+            //Ensure Tool Reaches Destination
+            toolDisplay.localPosition = toolRestingPosition;
+
+            //Remove Completed Tool
+            if (outgoingTool != null)
+            {
+                Destroy(outgoingTool.gameObject);
+                outgoingTool = null;
+            }
         }
     }
 
-    private IEnumerator ShakeTool()
+    private IEnumerator ShakeTool(Transform toolToShake)
     {
-        if (outgoingTool == null || shakeDuration <= 0f)
+        if (toolToShake == null || shakeDuration <= 0f)
         {
             yield break;
         }
         
         //Store Tool's Original Rotation
-        Quaternion startingRotation = outgoingTool.localRotation;
+        Quaternion startingRotation = toolToShake.localRotation;
 
         float elapsed = 0f;
         while (elapsed < shakeDuration)
@@ -227,12 +273,12 @@ public class ToolController : MonoBehaviour
 
             //Shake Tool
             float angle = Mathf.Sin(progress * Mathf.PI * 2f) * toolRotationAmount; //Essentially rotates between 0, rotation, -rotation
-            outgoingTool.localRotation = startingRotation * Quaternion.Euler(0f, 0f, angle);
+            toolToShake.localRotation = startingRotation * Quaternion.Euler(0f, 0f, angle);
 
             yield return null;
         }
 
         //Restore Original Rotation
-        outgoingTool.localRotation = startingRotation;
+        toolToShake.localRotation = startingRotation;
     }
 }

@@ -64,17 +64,6 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "6f50a107-32a2-4657-a3b9-00f186b76ce8",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Up",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "cdbe6d4f-6324-4fdb-a8ba-5596661eb1ab",
                     "path": "<Keyboard>/s",
                     "interactions": "",
@@ -125,6 +114,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "X",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4900743-03c8-4783-97a4-ffe4b93e0227",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Up",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
