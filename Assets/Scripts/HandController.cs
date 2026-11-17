@@ -7,6 +7,7 @@ public class HandController : MonoBehaviour
     [SerializeField] private float moveDuration = 0.1f; 
     [SerializeField] private float pauseAtGerm = 0.03f;
     [SerializeField] private float wipingDuration = 0.05f;
+    [SerializeField] private float strongWipeMultipler = 2f;
     [SerializeField] private float rotationAmount = 15f;
     private Vector3 restingPos;
     private Quaternion restingRotation; 
@@ -30,7 +31,7 @@ public class HandController : MonoBehaviour
         
     }
 
-    public void MoveToGerm(Vector3 germPosition)
+    public void MoveToGerm(Vector3 germPosition, bool strongWipe = false)
     {
         //Interrupt Previous Movement
         if (movementRoutine != null)
@@ -41,10 +42,17 @@ public class HandController : MonoBehaviour
         //Clear Any Interrupted Wiping Motion
         transform.localRotation = restingRotation;
 
-        movementRoutine = StartCoroutine(CleanGerm(germPosition));
+        //Determine If It's a Strong Wipe
+        float wipeRotation = rotationAmount;
+        if (strongWipe)
+        {
+            wipeRotation *= strongWipeMultipler;
+        }
+
+        movementRoutine = StartCoroutine(CleanGerm(germPosition, wipeRotation));
     }
 
-    private IEnumerator CleanGerm(Vector3 targetPos)
+    private IEnumerator CleanGerm(Vector3 targetPos, float wipeRotation)
     {
         //Move to Germ
         yield return MoveToPosition(targetPos);
@@ -53,7 +61,7 @@ public class HandController : MonoBehaviour
         yield return new WaitForSeconds(pauseAtGerm);
 
         //Wiping Motion
-        yield return WipingMotion(rotationAmount);
+        yield return WipingMotion(wipeRotation);
 
         //Return to Resting Position
         yield return MoveToPosition(restingPos);

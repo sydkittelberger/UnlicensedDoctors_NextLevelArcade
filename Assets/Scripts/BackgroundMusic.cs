@@ -3,9 +3,9 @@ using UnityEngine;
 public class BackgroundMusic : MonoBehaviour
 {
     //Private Variables
-    private static BackgroundMusic instance;
 
     //Public Variables
+    public static BackgroundMusic instance;
 
     void Awake()
     {
@@ -28,5 +28,13 @@ public class BackgroundMusic : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void OnDestroy()
+    {
+        if (instance == this)
+        {
+            instance = null;
+        }
     }
 }

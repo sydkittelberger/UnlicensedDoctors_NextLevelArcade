@@ -11,7 +11,7 @@ public class CreateHighScoreList : MonoBehaviour
     {
         foreach( ScoreEntry s in GameManager.manager.scoreData.scoreList)
         {
-            GameObject li = Instantiate(listItem);
+            GameObject li = Instantiate(listItem, transform, false);
             li.transform.SetParent(this.gameObject.transform);
             li.GetComponent<SetScoreText>().SetText(s.initials, s.score.ToString());
         }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 using System.Collections;
 
 public class PatternGameController : MonoBehaviour
@@ -13,6 +14,8 @@ public class PatternGameController : MonoBehaviour
 
     //Public Variables
     public SetUIText setUIText;
+    public AudioSource audioSource;
+    public AudioClip cleanedToolSound;
     public int numberOfPatterns = 8;
     public float totalTime = 5f;
     public float timeRemaining;
@@ -86,6 +89,9 @@ public class PatternGameController : MonoBehaviour
             {                
                 //Stop Timer
                 timerIsRunning = false;
+
+                //Play Sound Effect
+                audioSource.PlayOneShot(cleanedToolSound);
                 
                 numberOfPatterns--;
 
@@ -170,6 +176,7 @@ public class PatternGameController : MonoBehaviour
         
     }
 
+    //All Tools are Successfully Cleaned; Game Over Handled Elsewhere
     private IEnumerator FinishLevel()
     {
         yield return toolController.AnimateToolTransition(true);

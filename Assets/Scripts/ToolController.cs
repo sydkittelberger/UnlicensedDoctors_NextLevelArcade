@@ -150,12 +150,12 @@ public class ToolController : MonoBehaviour
             germSpriteRenderer.sprite = currentTool.germRightSprite;
             break;
 
-            case "Z":
+            case "B1":
             targetGerm.localPosition = currentTool.b1Position;
             germSpriteRenderer.sprite = currentTool.germB1Sprite;
             break;
 
-            case "X":
+            case "B2":
             targetGerm.localPosition = currentTool.b2Position;
             germSpriteRenderer.sprite = currentTool.germB2Sprite;
             break;

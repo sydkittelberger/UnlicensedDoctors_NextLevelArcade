@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public List<ScoreEntry> scoreList;
     public int score;
     public string initials;
-    public int maxEntries = 8;
+    public int maxEntries = 6;
     public string filepath;
 
     private void Awake()

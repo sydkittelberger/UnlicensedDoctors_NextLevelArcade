@@ -39,7 +39,7 @@ public class EnterInitials : MonoBehaviour
     //Switch Between Columns
     public void MoveSlot(float _value)
     {
-        initials[currentInitialSlot].color = Color.white;
+        initials[currentInitialSlot].color = Color.black;
         currentInitialSlot = Mathf.Clamp(currentInitialSlot + (int)_value, 0, initials.Length - 1);
         initials[currentInitialSlot].color = Color.red;
 

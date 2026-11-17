@@ -10,8 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f53919efcb70a142868908cca5c8d92, type: 3}
-  m_Name: NPC1
+  m_Name: Doctor1
   m_EditorClassIdentifier: Assembly-CSharp::NPCDialogSO
   dialogLines:
-  - text: 'Come at once!! A patient just arrived with a broken leg, we must amputate
+  - text: 'COME AT ONCE! A patient just arrived with a broken leg, we must amputate
       it. Quickly go clean my tools at once! '
+  - text: What? You don't know how to?
+  - text: 'Imbecile! Fine, I''ll tell you. '
+  - text: Move your rag up, down, left, and right to wipe away the germs. If you
+      see any bugs crawling about, crush them.

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Audio;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.SceneManagement;
@@ -16,10 +17,14 @@ public class PatternInput : MonoBehaviour
     private SetDarkeningEffect setDarkeningEffect;
     private bool enableControl = false;
     private bool patternCompleted = false;
+    private bool gameOverStarted = false;
 
     //Public Variables
     public List<InputAction> currentSequence;
     public List<ToolSO> currentTools;
+    public AudioSource audioSource;
+    public AudioClip lostLifeSound;
+    public float breathingFadeDuration = 2f;
     public int lives = 3; 
 
 
@@ -31,7 +36,7 @@ public class PatternInput : MonoBehaviour
         toolController = FindAnyObjectByType<ToolController>();
         handController = FindAnyObjectByType<HandController>();
         cameraShakeController = FindAnyObjectByType<CameraShake>();
-        audioController = FindAnyObjectByType<AudioController>();
+        audioController = BackgroundMusic.instance.GetComponent<AudioController>();
         setDarkeningEffect = FindAnyObjectByType<SetDarkeningEffect>();
 
         //Prevent Gameplay Without a Generator or Tool Controller
@@ -76,7 +81,8 @@ public class PatternInput : MonoBehaviour
         {
             //Record Germ's Current Position, Animate Hand Towards its Direction
             Vector3 germPosition = toolController.germ.position; //Using germ.position since the hand is not a parent of the germ
-            handController.MoveToGerm(germPosition);
+            bool strongWipe = aContext.action.name == "B1" || aContext.action.name == "B2";
+            handController.MoveToGerm(germPosition, strongWipe);
             
             //Remove Action From List
             currentSequence.RemoveAt(0);
@@ -183,6 +189,12 @@ public class PatternInput : MonoBehaviour
         //Darken the Game
         setDarkeningEffect.IncreaseDarkness();
 
+        //Play Sound Effect
+        audioSource.PlayOneShot(lostLifeSound);
+
+        //Start or Intensify Breathing
+        audioController.IntensifyBreathing();
+
         if (lives <= 0)
         {
             GameOver();
@@ -201,11 +213,41 @@ public class PatternInput : MonoBehaviour
 
     public void GameOver()
     {
+        if (gameOverStarted)
+        return;
+        
+        gameOverStarted = true;
         enableControl = false;
 
         //Prepare and Save Score Before Moving to Next Scene
         GameManager.manager.score = Mathf.CeilToInt(patternGameController.score);
 
+        StartCoroutine(LoadGameOverScene());
+    }
+
+    private IEnumerator LoadGameOverScene()
+    {
+        float transitionStarted = Time.realtimeSinceStartup;
+
+        //Fade Breathing
+        if (audioController != null)
+        {
+            yield return audioController.FadeOutBreathing(breathingFadeDuration);
+        }
+        
+        //Wait For Any remaining Sound Effect
+        if (lostLifeSound != null)
+        {
+            float elapsed = Time.realtimeSinceStartup - transitionStarted;
+            float remaining = lostLifeSound.length - elapsed;
+
+            if (remaining > 0f)
+            {
+                yield return new WaitForSecondsRealtime(remaining);
+            }
+        }
+
+        //Load the Next Scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
