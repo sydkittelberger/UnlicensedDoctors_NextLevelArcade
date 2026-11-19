@@ -8,6 +8,7 @@ public class SetDialogText : MonoBehaviour
 
     //Public Variables
     public TMP_Text dialogText;
+    public GameObject instructions;
     public GameObject textBox;
 
     void Start()
@@ -31,10 +32,12 @@ public class SetDialogText : MonoBehaviour
     public void ShowTextBox()
     {
         textBox.SetActive(true);
+        instructions.SetActive(true);
     }
 
     public void HideTextBox()
     {
         textBox.SetActive(false);
+        instructions.SetActive(false);
     }
 }

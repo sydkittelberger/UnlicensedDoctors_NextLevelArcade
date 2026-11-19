@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCDialogSO
   dialogLines:
   - text: 'COME AT ONCE! A patient just arrived with a broken leg, we must amputate
-      it. Quickly go clean my tools at once! '
+      it. Quickly, go clean my tools at once! '
   - text: What? You don't know how to?
   - text: 'Imbecile! Fine, I''ll tell you. '
   - text: Move your rag up, down, left, and right to wipe away the germs. If you
